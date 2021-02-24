@@ -132,11 +132,17 @@ def main():
             mf_io.send_board_state(game.get_board())
             game.print_update()
             square_coords = mf_io.get_square()
+            if square_coords == 'resign':
+                mf_io.send_loser(game.board, True)
+                break
             attacks = game.press_query(square_coords)
             if attacks is None:
                 continue
             mf_io.send_piece_selected(game.board, square_coords, attacks)
             target_coords = mf_io.get_square()
+            if square_coords == 'resign':
+                mf_io.send_loser(game.board, True)
+                break
             confirm = game.press_confirm(square_coords, target_coords)
             if not confirm:
                 continue
@@ -146,7 +152,8 @@ def main():
 
         print(game.board.result())
         mf_io.send_loser(game.board)
-        mf_io.get_square()
+        print('\n\nPress any button to go again...')
+        mf_io.wait_for_down_press()
 
 
 
