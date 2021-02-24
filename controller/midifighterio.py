@@ -78,7 +78,7 @@ class MidiFighterIO():
             if piece[1].color: # white
                 self.board.set(self.square_to_coords(piece[0]), ['7f', '7f', '7f'])
             else:
-                self.board.set(self.square_to_coords(piece[0]), ['2f', '00', '17'])
+                self.board.set(self.square_to_coords(piece[0]), ['7b', '00', '3d'])
             if board.is_check() and piece[1].symbol() == 'K':
                 self.board.set(self.square_to_coords(piece[0]), ['7f', '7f', '00'])
 
