@@ -7,9 +7,14 @@ from .constants import *
 class MidiFighterIO():
     def __init__(self):
         self.board = MIDIBoard()
-        self.input = mido.open_input('Midi Fighter 64')
-        self.output = mido.open_output('Midi Fighter 64')
-        # self.draw_queue = Queue()
+        input_name = next(filter(lambda x: x.startswith('Midi Fighter'), mido.get_input_names()))
+        output_name = next(filter(lambda x: x.startswith('Midi Fighter'), mido.get_output_names()))
+        self.input = mido.open_input(input_name)
+        self.output = mido.open_output(output_name)
+        # init note-off hex
+        print('\n\nPress any key to begin...')
+        self.input.receive()
+        self.note_off = self.input.receive().hex().split()[0]
 
     def square_to_coords(self, coord):
         if isinstance(coord, list) or isinstance(coord, tuple):
@@ -21,7 +26,7 @@ class MidiFighterIO():
         list(self.input.iter_pending())
 
         button_data = self.input.receive()
-        while not button_data.hex().startswith(MIDI_NOTE_OFF):
+        while not button_data.hex().startswith(self.note_off):
             button_data = self.input.receive()
         return button_data.hex().split()[1]
 
